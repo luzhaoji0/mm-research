@@ -1,0 +1,4 @@
+exclude = ["Cargo.lock", "python/uv.lock", ".direnv/**", "**/.venv/**", "target/**"]
+
+[formatting]
+column_width = 100

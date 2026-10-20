@@ -1,0 +1,24 @@
+[package]
+name = "mm-pyo3"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "mm-research の Python 向けネイティブ拡張"
+
+[lints]
+workspace = true
+
+[lib]
+name = "_native"
+crate-type = ["rlib", "cdylib"]
+
+[features]
+default = []
+extension-module = ["pyo3/extension-module"]
+
+[dependencies]
+mm-core.workspace = true
+pyo3.workspace = true

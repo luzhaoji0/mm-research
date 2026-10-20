@@ -1,0 +1,17 @@
+[default]
+locale = "en-us"
+
+[files]
+ignore-hidden = false
+extend-exclude = [
+  "LICENSE",
+  "python/LICENSE",
+  ".git/",
+  ".direnv/",
+  "**/.venv/",
+  "target/",
+  "dist/",
+  "Cargo.lock",
+  "flake.lock",
+  "python/uv.lock",
+]

@@ -1,0 +1,36 @@
+# 開発環境と生成されたネイティブ拡張
+.direnv/
+.venv/
+python/.venv/
+*.so
+*.dylib
+*.pyd
+__pycache__/
+*.py[cod]
+
+# ビルド、テスト、開発ツールの出力
+/target/
+/dist/
+/result
+/result-*
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.profraw
+
+# ローカルの認証情報、データ、モデルの成果物
+.env
+.env.*
+!.env.example
+*.key
+/data/
+/artifacts/
+/checkpoints/
+*.parquet
+*.pt
+*.safetensors
+
+# エディターとオペレーティングシステム
+.idea/
+.DS_Store

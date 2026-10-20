@@ -1,0 +1,79 @@
+[project]
+name = "mm-research"
+version = "0.1.0"
+description = "NautilusTrader を用いた予測市場向けの深層学習・マーケットメイキング研究基盤"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+readme = "../README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = ["nautilus-trader==2.0.0rc7"]
+
+[project.optional-dependencies]
+cpu = ["numpy>=2.3,<3", "torch==2.11.0"]
+cuda = [
+  "numpy>=2.3,<3; sys_platform == 'linux' and platform_machine == 'x86_64'",
+  "torch==2.11.0; sys_platform == 'linux' and platform_machine == 'x86_64'",
+]
+
+[build-system]
+requires = ["maturin==1.15.0"]
+build-backend = "maturin"
+
+[dependency-groups]
+test = ["pytest>=9,<10"]
+
+[tool.maturin]
+manifest-path = "../crates/pyo3/Cargo.toml"
+module-name = "mm_research._native"
+python-source = "."
+features = ["extension-module"]
+locked = true
+include = ["mm_research/*.pyi", "mm_research/py.typed"]
+
+[tool.uv]
+required-version = ">=0.13,<0.14"
+environments = [
+  "sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "sys_platform == 'linux' and platform_machine == 'x86_64'",
+  "sys_platform == 'linux' and platform_machine == 'aarch64'",
+]
+conflicts = [[{ extra = "cpu" }, { extra = "cuda" }]]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cuda"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform == 'linux'" },
+  { index = "pytorch-cuda", extra = "cuda", marker = "sys_platform == 'linux' and platform_machine == 'x86_64'" },
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "SIM", "RUF", "ANN"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["mm_research"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.pyrefly]
+project-includes = ["mm_research", "tests", "check_packaging.py"]
+python-version = "3.13"
+preset = "strict"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-config --strict-markers --import-mode=importlib"
+filterwarnings = ["error"]

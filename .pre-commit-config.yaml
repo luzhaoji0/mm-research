@@ -1,0 +1,102 @@
+default_stages: [pre-commit]
+
+repos:
+  - repo: local
+    hooks:
+      - id: trailing-whitespace
+        name: trailing whitespace
+        entry: trailing-whitespace-fixer
+        language: system
+        types: [text]
+      - id: end-of-file-fixer
+        name: final newline
+        entry: end-of-file-fixer
+        language: system
+        types: [text]
+      - id: check-merge-conflict
+        name: merge conflicts
+        entry: check-merge-conflict
+        language: system
+        types: [text]
+      - id: check-toml
+        name: TOML syntax
+        entry: check-toml
+        language: system
+        types: [toml]
+      - id: check-yaml
+        name: YAML syntax
+        entry: check-yaml
+        language: system
+        types: [yaml]
+      - id: check-added-large-files
+        name: large files
+        entry: check-added-large-files
+        language: system
+      - id: detect-private-key
+        name: private keys
+        entry: detect-private-key
+        language: system
+        types: [text]
+      - id: gitleaks
+        name: staged secret scan
+        entry: gitleaks git --pre-commit --staged --redact
+        language: system
+        pass_filenames: false
+      - id: ruff
+        name: Ruff lint
+        entry: ruff check --fix --config python/pyproject.toml
+        language: system
+        types_or: [python, pyi]
+      - id: ruff-format
+        name: Ruff format
+        entry: ruff format --config python/pyproject.toml
+        language: system
+        types_or: [python, pyi]
+      - id: rustfmt
+        name: Rust format
+        entry: cargo fmt --all -- --check
+        language: system
+        types: [rust]
+        pass_filenames: false
+      - id: taplo
+        name: TOML format
+        entry: taplo format
+        language: system
+        types: [toml]
+      - id: nixfmt
+        name: Nix format
+        entry: nixfmt
+        language: system
+        types: [nix]
+      - id: actionlint
+        name: GitHub Actions syntax
+        entry: actionlint
+        language: system
+        files: ^\.github/workflows/.*\.ya?ml$
+      - id: uv-lock
+        name: Python lock consistency
+        entry: uv lock --project python --check
+        language: system
+        files: ^python/(pyproject\.toml|uv\.lock)$
+        pass_filenames: false
+      - id: typos
+        name: spelling
+        entry: typos --force-exclude
+        language: system
+        types: [text]
+      - id: yamlfmt
+        name: YAML format
+        entry: yamlfmt
+        language: system
+        files: (\.ya?ml$|^\.yamlfmt$)
+      - id: yamllint
+        name: YAML lint
+        entry: yamllint --strict
+        language: system
+        files: (\.ya?ml$|^\.yamlfmt$)
+      - id: cargo-deny
+        name: Rust dependency policy
+        entry: cargo deny --locked check bans licenses sources
+        language: system
+        files: (^|/)Cargo\.(toml|lock)$|^deny\.toml$
+        pass_filenames: false

@@ -1,0 +1,12 @@
+[package]
+name = "mm-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "mm-research の共通 Rust 処理"
+
+[lints]
+workspace = true
